@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 
 
-public class EnemyBase : MonoBehaviour,IDamageble
+public abstract class EnemyBase : MonoBehaviour,IDamageble,IAttack
 {
     public bool isAngry;
     public bool playerrange;
@@ -15,10 +15,12 @@ public class EnemyBase : MonoBehaviour,IDamageble
     public TriggerObserver TriggerObserver;
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private HealthBar _healthbar;
-    private int _currentHealth;    
+    [SerializeField] protected float AttackCooldown = 3.0f;
+    private int _currentHealth;
+    protected float _attackCooldown;
+    protected bool _isAttacking;
 
-    
-    protected virtual void Start()
+    protected  void Start()
     {
         TriggerObserver.TriggerEnter += TriggerEnter;
         TriggerObserver.TriggerExit += TriggerExit;
@@ -27,7 +29,30 @@ public class EnemyBase : MonoBehaviour,IDamageble
         enemyfollow.enabled = false;
         _healthbar.SetValue(_currentHealth, _maxHealth);
     }
-    
+
+    protected void Update()
+    {
+        UpdateCooldown();
+
+        if (CanAttack())
+            StartAttack();
+    }
+
+    protected void OnAttackEnded()
+    {
+        _attackCooldown = AttackCooldown;
+        _isAttacking = false;
+    }
+
+    protected bool CooldownIsUp() =>
+      _attackCooldown <= 0f;
+
+    protected void UpdateCooldown()
+    {
+        if (!CooldownIsUp())
+            _attackCooldown -= Time.deltaTime;
+    }
+
     private void TriggerEnter(Collider obj)
     {
         isAngry = true;
@@ -70,5 +95,11 @@ public class EnemyBase : MonoBehaviour,IDamageble
         TriggerObserver.TriggerExit -= TriggerExit;
         
     }
+    protected virtual bool CanAttack() =>
+     !_isAttacking && CooldownIsUp();
 
+    public virtual void StartAttack()
+    {
+        
+    }
 }

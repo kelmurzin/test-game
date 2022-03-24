@@ -7,14 +7,7 @@ public class GameOver : MonoBehaviour
     [SerializeField] private PlayerHealth _playerhealth;
     [SerializeField] private GameObject _panellose;
     [SerializeField] private TimeState _timeState;
-
-    
-
-    public void OnEnable()
-    {
-        _playerhealth.OnDie += Gameover;
-    }
-
+            
     public void Gameover()
     {
         _panellose.SetActive(true);
@@ -27,9 +20,11 @@ public class GameOver : MonoBehaviour
         _timeState.Resume();
     }
 
-    public void OnDisable()
-    {
-        _playerhealth.OnDie -= Gameover;
+    private void OnEnable() =>
+            _playerhealth.OnDie += Gameover;
+
+    private void OnDisable()=>
+            _playerhealth.OnDie -= Gameover;
         
-    }
+    
 }

@@ -1,0 +1,4 @@
+﻿interface IAttack 
+{
+    void StartAttack();  
+}

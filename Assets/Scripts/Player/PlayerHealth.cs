@@ -4,12 +4,12 @@ using UnityEngine;
 using System;
 public class PlayerHealth : MonoBehaviour,IDamageble
 {
+    public event Action OnDie;
+
     [SerializeField] private HealthBar _healthbar;
     [SerializeField] private int _maxHealth = 100;
     private int _currentHealth;
-
-    public  event Action OnDie;
-
+    
     private void Start()
     {
         _currentHealth = _maxHealth;
@@ -22,11 +22,6 @@ public class PlayerHealth : MonoBehaviour,IDamageble
         _healthbar.SetValue(_currentHealth, _maxHealth);
         
         if (_currentHealth <= 0)
-        {
-            OnDie?.Invoke();
-            
-        }
-    }
-
-   
+            OnDie?.Invoke();                    
+    }   
 }

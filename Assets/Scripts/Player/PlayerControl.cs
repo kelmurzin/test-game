@@ -5,14 +5,11 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {   
     
-
     [SerializeField] private Transform firepoint;
     [SerializeField] private int damage = 10;
     [SerializeField] private int range = 10;
     [SerializeField] private float moveSpeed;
-
-    
-    
+        
     private Camera mainCamera;
     private Rigidbody myRb;
 
@@ -20,7 +17,6 @@ public class PlayerControl : MonoBehaviour
     {
         myRb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
-
     }
 
     private void Update()
@@ -39,29 +35,20 @@ public class PlayerControl : MonoBehaviour
             transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
         }
         if (Input.GetMouseButtonDown(0))
-        {
-            Shoot();
-
-        }
+            Shoot();        
     }
 
     private void Shoot()
     {
         RaycastHit hit;
-
         Ray ray = new Ray(firepoint.position, firepoint.forward);
 
         if (Physics.Raycast(ray, out hit, range))
-        {
-
-            
+        {            
             EnemyBase target = hit.transform.GetComponent<EnemyBase>();
-
             if (target != null)
-            {
                 target.TakeDamage(damage);
-            }
-           
+                       
             ParticleFX.Instance.PlayExplosionFX(hit.point);
         }
     }

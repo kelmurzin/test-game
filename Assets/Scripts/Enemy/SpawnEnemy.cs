@@ -7,11 +7,9 @@ public class SpawnEnemy : MonoBehaviour
     [SerializeField] private Transform[] _spawnPoint;
     [SerializeField] private float spawnTime = 4f;
 
-    private void Start()
-    {
-        StartCoroutine(Spawn());
-        
-    }
+    private void Start()=>
+          StartCoroutine(Spawn());
+
 
     IEnumerator Spawn()
     {
@@ -26,11 +24,6 @@ public class SpawnEnemy : MonoBehaviour
                 enemy.SetActive(true);
             }
             yield return new WaitForSeconds(spawnTime);
-
-
         }
-
     }
-
-
 }
